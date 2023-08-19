@@ -10,7 +10,8 @@ testset = torchvision.datasets.CIFAR10('dataset',train=False,transform=torchvisi
 testloader = DataLoader(testset,64)
 
 # Load model
-network = model.Network().load_state_dict()
+network = model.Network()
+network.load_state_dict(torch.load('network.pth'))
 
 # Loss function
 loss_fn = nn.CrossEntropyLoss()    
@@ -21,7 +22,7 @@ opt = optim.SGD(network.parameters(),lr=0.01)
 # Train
 for epoch in range(10):
     running_loss = 0.0
-    print('---epoch {} starts---'.format(epoch))
+    print('---epoch {} starts---'.format(epoch+1))
     for data in dataloader:
         opt.zero_grad()
         imgs,tgts = data
@@ -39,5 +40,5 @@ for epoch in range(10):
             loss = loss_fn(output,tgts)
             test_loss += loss
     print('total test loss: {}'.format(test_loss.item()))
-    print('---epoch {} finishes---'.format(epoch))
+    print('---epoch {} finishes---'.format(epoch+1))
 torch.save(network.state_dict(),'network.pth')
