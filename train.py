@@ -19,6 +19,9 @@ loss_fn = nn.CrossEntropyLoss()
 # Optimizer
 opt = optim.SGD(network.parameters(),lr=0.01)
 
+# Length
+train_len = len(dataset)
+test_len = len(testset)
 # Train
 for epoch in range(10):
     running_loss = 0.0
@@ -33,12 +36,16 @@ for epoch in range(10):
         running_loss += loss
     print('total running loss: {}'.format(running_loss.item()))
     test_loss = 0.0
+    test_accuracy = 0.0
     with torch.no_grad():
         for data in testloader:
             imgs,tgts = data
             output = network(imgs)
             loss = loss_fn(output,tgts)
             test_loss += loss
+            accuracy = (output.argmax(1)==tgts).sum()
+            test_accuracy+=accuracy
     print('total test loss: {}'.format(test_loss.item()))
+    print('total test accuracy: {}'.format(test_accuracy/test_len))
     print('---epoch {} finishes---'.format(epoch+1))
 torch.save(network.state_dict(),'network.pth')
