@@ -1,2 +1,2 @@
 # CIFAR10
-neural networks tutorial project
+a neural networks tutorial project
